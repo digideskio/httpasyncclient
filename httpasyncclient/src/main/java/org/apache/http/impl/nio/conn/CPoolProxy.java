@@ -31,6 +31,8 @@ import java.net.InetAddress;
 
 import javax.net.ssl.SSLSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpConnectionMetrics;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -44,6 +46,8 @@ import org.apache.http.protocol.HttpContext;
 
 @NotThreadSafe
 class CPoolProxy implements ManagedNHttpClientConnection {
+
+    private final Log log = LogFactory.getLog(CPoolProxy.class);
 
     private volatile CPoolEntry poolEntry;
 
@@ -143,8 +147,17 @@ class CPoolProxy implements ManagedNHttpClientConnection {
     public boolean isOpen() {
         final CPoolEntry local = this.poolEntry;
         if (local != null) {
-            return !local.isClosed();
+            final boolean b = local.isClosed();
+            if (this.log.isDebugEnabled()) {
+                if (!b) {
+                    this.log.debug("Proxy: connection open");
+                } else {
+                    this.log.debug("Proxy: connection closed");
+                }
+            }
+            return !b;
         } else {
+            this.log.debug("Proxy: connection already detached");
             return false;
         }
     }

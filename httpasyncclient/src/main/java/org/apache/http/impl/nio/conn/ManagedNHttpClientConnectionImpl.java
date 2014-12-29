@@ -139,6 +139,15 @@ class ManagedNHttpClientConnectionImpl
     }
 
     @Override
+    public boolean isOpen() {
+        final boolean b = super.isOpen();
+        if (this.log.isDebugEnabled()) {
+            this.log.debug("IsOpen: " + toString());
+        }
+        return b;
+    }
+
+    @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder();
         buf.append(this.id);
