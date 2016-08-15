@@ -243,6 +243,8 @@ abstract class AbstractClientExchangeHandler<T> implements HttpAsyncClientExchan
                     if (this.log.isDebugEnabled()) {
                         this.log.debug("[exchange: " + this.id + "] connection discarded");
                     }
+                    this.routeEstablished.set(false);
+                    this.routeTrackerRef.set(null);
                 } catch (final IOException ex) {
                     if (this.log.isDebugEnabled()) {
                         this.log.debug(ex.getMessage(), ex);
